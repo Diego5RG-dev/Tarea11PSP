@@ -34,7 +34,7 @@ public class hilos extends Thread {
                 Thread.currentThread().interrupt();
             }
         }
-        System.out.println("Acabó hilo " + getName());
+        System.out.println("Acabó " + getName());
     }
     public static void main(String[] args) {
         new hilos(1).start();

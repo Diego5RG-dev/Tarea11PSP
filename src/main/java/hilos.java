@@ -1,30 +1,42 @@
-public class hilos extends Thread{
-    private final int limite;
-    private int maximoHilos;
-    private int ConteoActual;
+import java.util.Random;
 
+public class hilos extends Thread {
+    private final int totalHilos = 5;
+    private int identificadorHilos;
+    private hilos siguienteHilo = null;
 
-    public hilos(String str, int limite, int maximoHilos){
-        super(str);
-        this.limite = limite;
-        this.maximoHilos = maximoHilos;
+    public hilos(int index) {
+        super("Hilo-" + index);
+        this.identificadorHilos = index;
     }
 
     @Override
-    public void run(){
-        for(int contador=1; contador<=limite; contador++){
-            System.out.println("hilo "+getName()+" iteracion: "+contador);
-            if (maximoHilos < 5) {
-                maximoHilos++;
-                new hilos("hilo "+maximoHilos, limite, maximoHilos).start();
-            }else {
-                System.out.println("hilo" +getName()+" termino con "+contador+" iteraciones");
+    public void run() {
+        if (identificadorHilos < totalHilos) {
+            siguienteHilo = new hilos(identificadorHilos + 1);
+            siguienteHilo.start();
+        }
+        Random random = new Random();
+        for (int contador = 1; contador <= 5; contador++) {
+            System.out.println("Soy el [" + getName() + "] iteración: " + contador);
+            try {
+                int waitTime = 100 + random.nextInt(501);
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
             }
         }
+        if (siguienteHilo != null) {
+            try {
+                siguienteHilo.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        System.out.println("Acabó hilo " + getName());
     }
-
     public static void main(String[] args) {
-        new hilos("principal", 5, 0).start();
-        System.out.println("hilo principal termino");
+        new hilos(1).start();
     }
 }

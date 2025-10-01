@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class hilos extends Thread {
-    private final int totalHilos = 5;
+    private int totalHilos = 5;
     private int identificadorHilos;
     private hilos siguienteHilo = null;
 
@@ -20,7 +20,7 @@ public class hilos extends Thread {
         for (int contador = 1; contador <= 5; contador++) {
             System.out.println("Soy el [" + getName() + "] iteración: " + contador);
             try {
-                int waitTime = 100 + random.nextInt(501);
+                int waitTime = 100 + random.nextInt(601);
                 Thread.sleep(waitTime);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
